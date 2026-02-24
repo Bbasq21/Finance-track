@@ -45,11 +45,16 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
           {/* Header */}
           <div className="expense-modal-header">
             <div>
-              <h4>Add New Expense</h4>
-              <p>Keep track of your spending habits</p>
+              <h4>Agregar Nuevo Gasto</h4>
+              <p>Lleva el control de tus hábitos de gasto</p>
             </div>
             <button className="expense-modal-close" onClick={onClose}>
-              ✕
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "20px" }}
+              >
+                close
+              </span>
             </button>
           </div>
 
@@ -58,7 +63,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
             <div className="expense-modal-body">
               {/* Amount */}
               <div className="mb-3">
-                <label className="form-label">Amount</label>
+                <label className="form-label">Monto</label>
                 <div className="input-group">
                   <span className="input-group-text">$</span>
                   <input
@@ -81,7 +86,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
               {/* Category + Date row */}
               <div className="row g-3 mb-3">
                 <div className="col-6">
-                  <label className="form-label">Category</label>
+                  <label className="form-label">Categoría</label>
                   <select
                     className="form-select"
                     value={category}
@@ -97,7 +102,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                   </select>
                 </div>
                 <div className="col-6">
-                  <label className="form-label">Date</label>
+                  <label className="form-label">Fecha</label>
                   <input
                     type="date"
                     className="form-control"
@@ -111,17 +116,17 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
               {/* Description */}
               <div className="mb-3">
                 <div className="d-flex justify-content-between">
-                  <label className="form-label">Description</label>
+                  <label className="form-label">Descripción</label>
                   <span
                     className="form-label"
                     style={{ color: "var(--text-muted)" }}
                   >
-                    Optional
+                    Opcional
                   </span>
                 </div>
                 <textarea
                   className="form-control"
-                  placeholder="e.g. Lunch with team at the cafe..."
+                  placeholder="ej. Almuerzo con el equipo en la cafetería..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
@@ -129,9 +134,15 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
 
               {/* Attach Receipt (visual only) */}
               <div className="mb-1">
-                <label className="form-label">Attach Receipt</label>
+                <label className="form-label">Adjuntar Recibo</label>
                 <div className="receipt-drop-area">
-                  📎 Drop file or click to upload
+                  <span
+                    className="material-symbols-outlined me-2"
+                    style={{ fontSize: "20px", verticalAlign: "middle" }}
+                  >
+                    attach_file
+                  </span>{" "}
+                  Suelta un archivo o haz clic para subir
                 </div>
               </div>
             </div>
@@ -139,10 +150,16 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
             {/* Footer */}
             <div className="expense-modal-footer">
               <button type="button" className="btn-cancel" onClick={onClose}>
-                Cancel
+                Cancelar
               </button>
               <button type="submit" className="btn-save-expense">
-                ✓ Save Expense
+                <span
+                  className="material-symbols-outlined me-1"
+                  style={{ fontSize: "18px", verticalAlign: "text-bottom" }}
+                >
+                  check
+                </span>{" "}
+                Guardar Gasto
               </button>
             </div>
           </form>

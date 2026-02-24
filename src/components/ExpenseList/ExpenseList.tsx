@@ -8,11 +8,11 @@ import type { Expense } from "../../types/expense";
 const ITEMS_PER_PAGE = 5;
 
 const CATEGORY_ICONS: Record<string, { icon: string; iconClass: string }> = {
-  Comida: { icon: "🍽️", iconClass: "icon-food" },
-  Transporte: { icon: "🚗", iconClass: "icon-transport" },
-  Entretenimiento: { icon: "🎬", iconClass: "icon-entertainment" },
-  Salud: { icon: "❤️", iconClass: "icon-health" },
-  Otros: { icon: "📦", iconClass: "icon-otros" },
+  Comida: { icon: "restaurant", iconClass: "icon-food" },
+  Transporte: { icon: "directions_car", iconClass: "icon-transport" },
+  Entretenimiento: { icon: "movie", iconClass: "icon-entertainment" },
+  Salud: { icon: "medical_services", iconClass: "icon-health" },
+  Otros: { icon: "inventory_2", iconClass: "icon-otros" },
 };
 
 const BADGE_CLASS: Record<string, string> = {
@@ -88,11 +88,11 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
             <table className="expense-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th style={{ textAlign: "right" }}>Amount</th>
-                  <th style={{ textAlign: "center" }}>Actions</th>
+                  <th>Fecha</th>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th style={{ textAlign: "right" }}>Monto</th>
+                  <th style={{ textAlign: "center" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,7 +113,12 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
                           <span
                             className={`expense-desc-icon ${meta.iconClass}`}
                           >
-                            {meta.icon}
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "20px" }}
+                            >
+                              {meta.icon}
+                            </span>
                           </span>
                           {expense.description || (
                             <span
@@ -147,14 +152,24 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
                           onClick={() => handleEdit(expense.id)}
                           title="Editar"
                         >
-                          ✏️
+                          <span
+                            className="material-symbols-outlined"
+                            style={{ fontSize: "18px" }}
+                          >
+                            edit
+                          </span>
                         </button>
                         <button
                           className="btn btn-delete"
                           onClick={() => handleDelete(expense.id)}
                           title="Eliminar"
                         >
-                          🗑️
+                          <span
+                            className="material-symbols-outlined"
+                            style={{ fontSize: "18px" }}
+                          >
+                            delete
+                          </span>
                         </button>
                       </td>
                     </tr>
@@ -166,9 +181,9 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
             {/* Pagination */}
             <div className="table-pagination">
               <span className="pagination-info">
-                Showing {startIdx + 1}-
+                Mostrando {startIdx + 1}-
                 {Math.min(startIdx + ITEMS_PER_PAGE, filteredExpenses.length)}{" "}
-                of {filteredExpenses.length} results
+                de {filteredExpenses.length} movimientos
               </span>
               <div className="pagination-buttons">
                 <button
@@ -176,14 +191,14 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
                 >
-                  Previous
+                  Anterior
                 </button>
                 <button
                   className="btn-page"
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => p + 1)}
                 >
-                  Next
+                  Siguiente
                 </button>
               </div>
             </div>

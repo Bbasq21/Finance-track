@@ -28,6 +28,19 @@
   --cat-otros-bg: #f5f3ff;
 }
 
+/* ===== Material Symbols Configuration ===== */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== Base Reset ===== */
 * {
   margin: 0;

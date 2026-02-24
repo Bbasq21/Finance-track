@@ -4,11 +4,11 @@ import { useExpenses } from "../../hooks/useExpenses";
 import { formatCurrency } from "../../utils/formatters";
 
 const CATEGORY_META: Record<string, { icon: string; iconClass: string }> = {
-  Comida: { icon: "🍽️", iconClass: "icon-food" },
-  Transporte: { icon: "🚗", iconClass: "icon-transport" },
-  Entretenimiento: { icon: "🎬", iconClass: "icon-entertainment" },
-  Salud: { icon: "❤️", iconClass: "icon-health" },
-  Otros: { icon: "📦", iconClass: "icon-otros" },
+  Comida: { icon: "restaurant", iconClass: "icon-food" },
+  Transporte: { icon: "directions_car", iconClass: "icon-transport" },
+  Entretenimiento: { icon: "movie", iconClass: "icon-entertainment" },
+  Salud: { icon: "medical_services", iconClass: "icon-health" },
+  Otros: { icon: "inventory_2", iconClass: "icon-otros" },
 };
 
 export const ExpenseSummary: React.FC = () => {
@@ -40,11 +40,13 @@ export const ExpenseSummary: React.FC = () => {
       {/* Total Balance Card */}
       <div className="summary-card">
         <div className="summary-card-header">
-          <span className="summary-card-label">Total Balance</span>
-          <span className="summary-card-icon icon-total">💰</span>
+          <span className="summary-card-label">Balance Total</span>
+          <span className="summary-card-icon icon-total">
+            <span className="material-symbols-outlined">account_balance</span>
+          </span>
         </div>
         <div className="summary-card-amount">{formatCurrency(total)}</div>
-        <div className="summary-card-sub">{expenses.length} Transactions</div>
+        <div className="summary-card-sub">{expenses.length} Movimientos</div>
       </div>
 
       {/* Category Cards */}
@@ -55,13 +57,13 @@ export const ExpenseSummary: React.FC = () => {
             <div className="summary-card-header">
               <span className="summary-card-label">{category}</span>
               <span className={`summary-card-icon ${meta.iconClass}`}>
-                {meta.icon}
+                <span className="material-symbols-outlined">{meta.icon}</span>
               </span>
             </div>
             <div className="summary-card-amount">
               {formatCurrency(data.amount)}
             </div>
-            <div className="summary-card-sub">{data.count} Transactions</div>
+            <div className="summary-card-sub">{data.count} Movimientos</div>
           </div>
         );
       })}
@@ -72,10 +74,12 @@ export const ExpenseSummary: React.FC = () => {
           <div className="summary-card" key={`empty-${i}`}>
             <div className="summary-card-header">
               <span className="summary-card-label">—</span>
-              <span className="summary-card-icon icon-otros">📊</span>
+              <span className="summary-card-icon icon-otros">
+                <span className="material-symbols-outlined">bar_chart</span>
+              </span>
             </div>
             <div className="summary-card-amount">{formatCurrency(0)}</div>
-            <div className="summary-card-sub">0 Transactions</div>
+            <div className="summary-card-sub">0 Movimientos</div>
           </div>
         ))}
     </div>

@@ -50,11 +50,16 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
           {/* Header */}
           <div className="expense-modal-header">
             <div>
-              <h4>Edit Expense</h4>
-              <p>Update your expense details</p>
+              <h4>Editar Gasto</h4>
+              <p>Actualiza los detalles de tu gasto</p>
             </div>
             <button className="expense-modal-close" onClick={onClose}>
-              ✕
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "20px" }}
+              >
+                close
+              </span>
             </button>
           </div>
 
@@ -63,7 +68,7 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
             <div className="expense-modal-body">
               {/* Amount */}
               <div className="mb-3">
-                <label className="form-label">Amount</label>
+                <label className="form-label">Monto</label>
                 <div className="input-group">
                   <span className="input-group-text">$</span>
                   <input
@@ -81,7 +86,7 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
               {/* Category + Date row */}
               <div className="row g-3 mb-3">
                 <div className="col-6">
-                  <label className="form-label">Category</label>
+                  <label className="form-label">Categoría</label>
                   <select
                     className="form-select"
                     value={category}
@@ -97,7 +102,7 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
                   </select>
                 </div>
                 <div className="col-6">
-                  <label className="form-label">Date</label>
+                  <label className="form-label">Fecha</label>
                   <input
                     type="date"
                     className="form-control"
@@ -111,17 +116,17 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
               {/* Description */}
               <div className="mb-3">
                 <div className="d-flex justify-content-between">
-                  <label className="form-label">Description</label>
+                  <label className="form-label">Descripción</label>
                   <span
                     className="form-label"
                     style={{ color: "var(--text-muted)" }}
                   >
-                    Optional
+                    Opcional
                   </span>
                 </div>
                 <textarea
                   className="form-control"
-                  placeholder="e.g. Lunch with team at the cafe..."
+                  placeholder="ej. Almuerzo con el equipo en la cafetería..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
@@ -131,10 +136,16 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
             {/* Footer */}
             <div className="expense-modal-footer">
               <button type="button" className="btn-cancel" onClick={onClose}>
-                Cancel
+                Cancelar
               </button>
               <button type="submit" className="btn-save-expense">
-                ✓ Save Changes
+                <span
+                  className="material-symbols-outlined me-1"
+                  style={{ fontSize: "18px", verticalAlign: "text-bottom" }}
+                >
+                  check
+                </span>{" "}
+                Guardar Cambios
               </button>
             </div>
           </form>
