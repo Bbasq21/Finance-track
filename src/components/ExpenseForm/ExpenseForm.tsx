@@ -1,4 +1,3 @@
-// src/components/ExpenseForm/ExpenseForm.tsx
 import { useState } from "react";
 import { useExpenses } from "../../hooks/useExpenses";
 import type { ExpenseCategory } from "../../types/expense";
@@ -42,7 +41,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
       <div className="expense-modal-backdrop" onClick={onClose}></div>
       <div className="expense-modal-wrapper">
         <div className="expense-modal" onClick={(e) => e.stopPropagation()}>
-          {/* Header */}
           <div className="expense-modal-header">
             <div>
               <h4>Agregar Nuevo Gasto</h4>
@@ -58,10 +56,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
             </button>
           </div>
 
-          {/* Body */}
           <form onSubmit={handleSubmit}>
             <div className="expense-modal-body">
-              {/* Amount */}
               <div className="mb-3">
                 <label className="form-label">Monto</label>
                 <div className="input-group">
@@ -83,7 +79,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* Category + Date row */}
               <div className="row g-3 mb-3">
                 <div className="col-6">
                   <label className="form-label">Categoría</label>
@@ -113,7 +108,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* Description */}
               <div className="mb-3">
                 <div className="d-flex justify-content-between">
                   <label className="form-label">Descripción</label>
@@ -132,7 +126,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                 ></textarea>
               </div>
 
-              {/* Attach Receipt (visual only) */}
               <div className="mb-1">
                 <label className="form-label">Adjuntar Recibo</label>
                 <div className="receipt-drop-area">
@@ -147,7 +140,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="expense-modal-footer">
               <button type="button" className="btn-cancel" onClick={onClose}>
                 Cancelar

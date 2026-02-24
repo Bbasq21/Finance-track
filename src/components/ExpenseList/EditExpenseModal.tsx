@@ -1,4 +1,3 @@
-// src/components/ExpenseList/EditExpenseModal.tsx
 import { useState } from "react";
 import type { Expense, ExpenseCategory } from "../../types/expense";
 import { useExpenses } from "../../hooks/useExpenses";
@@ -47,7 +46,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
       <div className="expense-modal-backdrop" onClick={onClose}></div>
       <div className="expense-modal-wrapper">
         <div className="expense-modal" onClick={(e) => e.stopPropagation()}>
-          {/* Header */}
           <div className="expense-modal-header">
             <div>
               <h4>Editar Gasto</h4>
@@ -63,10 +61,8 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
             </button>
           </div>
 
-          {/* Body */}
           <form onSubmit={handleSubmit}>
             <div className="expense-modal-body">
-              {/* Amount */}
               <div className="mb-3">
                 <label className="form-label">Monto</label>
                 <div className="input-group">
@@ -83,7 +79,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
                 </div>
               </div>
 
-              {/* Category + Date row */}
               <div className="row g-3 mb-3">
                 <div className="col-6">
                   <label className="form-label">Categoría</label>
@@ -113,7 +108,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
                 </div>
               </div>
 
-              {/* Description */}
               <div className="mb-3">
                 <div className="d-flex justify-content-between">
                   <label className="form-label">Descripción</label>
@@ -133,7 +127,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
               </div>
             </div>
 
-            {/* Footer */}
             <div className="expense-modal-footer">
               <button type="button" className="btn-cancel" onClick={onClose}>
                 Cancelar

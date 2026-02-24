@@ -1,4 +1,3 @@
-// src/components/ExpenseSummary/ExpenseSummary.tsx
 import { useMemo } from "react";
 import { useExpenses } from "../../hooks/useExpenses";
 import { formatCurrency } from "../../utils/formatters";
@@ -30,14 +29,12 @@ export const ExpenseSummary: React.FC = () => {
     return { total, categoryData };
   }, [expenses]);
 
-  // Get the top 3 categories by amount
   const topCategories = Object.entries(categoryData)
     .sort((a, b) => b[1].amount - a[1].amount)
     .slice(0, 3);
 
   return (
     <div className="summary-cards">
-      {/* Total Balance Card */}
       <div className="summary-card">
         <div className="summary-card-header">
           <span className="summary-card-label">Balance Total</span>
@@ -49,7 +46,6 @@ export const ExpenseSummary: React.FC = () => {
         <div className="summary-card-sub">{expenses.length} Movimientos</div>
       </div>
 
-      {/* Category Cards */}
       {topCategories.map(([category, data]) => {
         const meta = CATEGORY_META[category] || CATEGORY_META.Otros;
         return (
@@ -68,7 +64,6 @@ export const ExpenseSummary: React.FC = () => {
         );
       })}
 
-      {/* Fill remaining slots if less than 3 categories */}
       {topCategories.length < 3 &&
         Array.from({ length: 3 - topCategories.length }).map((_, i) => (
           <div className="summary-card" key={`empty-${i}`}>

@@ -1,4 +1,3 @@
-// src/components/ExpenseList/ExpenseList.tsx
 import { useState } from "react";
 import { useExpenses } from "../../hooks/useExpenses";
 import { formatCurrency, formatDate } from "../../utils/formatters";
@@ -178,7 +177,6 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
               </tbody>
             </table>
 
-            {/* Pagination */}
             <div className="table-pagination">
               <span className="pagination-info">
                 Mostrando {startIdx + 1}-
@@ -206,7 +204,6 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({
         )}
       </div>
 
-      {/* Edit Modal */}
       {editingExpense && (
         <EditExpenseModal
           expense={editingExpense}
