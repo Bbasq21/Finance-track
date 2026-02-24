@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# 💰 ExpenseTracker — Seguimiento de Gastos Personales
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+App web para registrar, visualizar y gestionar gastos personales. Dashboard con resumen por categorías, CRUD completo contra una API REST, filtros combinados y pruebas unitarias.
 
-Currently, two official plugins are available:
+> **Deploy en producción:** https://finance-track-brown.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🛠️ Stack Técnico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Capa              | Tecnología                                |
+| ----------------- | ----------------------------------------- |
+| **Framework**     | React 19 + TypeScript                     |
+| **Bundler**       | Vite                                      |
+| **Estilos**       | Bootstrap 5                               |
+| **Estado global** | Context API + Custom Hook (`useExpenses`) |
+| **Backend**       | MockAPI (REST, sin configuración extra)   |
+| **Testing**       | Vitest + React Testing Library            |
+| **Deploy**        | Vercel                                    |
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Dashboard** — 4 tarjetas de resumen: balance total + top 3 categorías con montos y conteo de movimientos.
+- **CRUD completo** — Crear, editar y eliminar gastos con modal dedicado y validaciones en formulario.
+- **Filtros combinados** — Por categoría (select), rango de fechas (inicio/fin) y búsqueda por descripción. Se aplican simultáneamente con `useMemo`.
+- **Botón "Limpiar Filtros"** — Renderizado condicional: solo aparece si hay al menos un filtro activo.
+- **Paginación** — Tabla con navegación de 5 items por página.
+- **Confirmación de eliminación** — Alerta nativa antes de borrar un gasto.
+- **Formato localizado** — Moneda en COP y fechas en español colombiano (`Intl.DateTimeFormat`).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Ejecución Local
+
+No necesitas configurar variables de entorno. MockAPI ya está integrada directamente en el código.
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/Bbasq21/Finance-track.git
+cd finance-track
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Levantar el servidor de desarrollo
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+La app abre en `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🧪 Pruebas Unitarias
+
+31 tests cubriendo componentes clave y utilidades:
+
+```bash
+npm run test
 ```
+
+| Archivo                     | Qué valida                                                                |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `formatters.test.ts`        | Formato de moneda COP y fechas, edge cases con valores inválidos          |
+| `filters.test.ts`           | Filtrado por categoría, rango de fechas y combinaciones                   |
+| `ExpenseSummary.test.tsx`   | Cálculos matemáticos de totales, renderizado vacío                        |
+| `ExpenseList.test.tsx`      | Loading, errores, paginación, confirmación al eliminar, apertura de modal |
+| `ExpenseForm.test.tsx`      | Validación de campos requeridos, envío exitoso con datos correctos        |
+| `EditExpenseModal.test.tsx` | Inicialización con datos del gasto, envío de edición                      |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── components/
+│   ├── ExpenseForm/          # Modal para agregar gastos
+│   ├── ExpenseList/          # Tabla + modal de edición
+│   └── ExpenseSummary/       # Tarjetas de resumen del dashboard
+├── context/                  # ExpenseContext + Provider
+├── hooks/                    # useExpenses (consume el context)
+├── services/                 # Cliente Axios contra MockAPI
+├── types/                    # Interfaces TypeScript (Expense, CreateExpenseDTO)
+└── utils/                    # formatters.ts, filters.ts
+```
+
+---
+
+## 📦 Build de Producción
+
+```bash
+npm run build
+```
+
+Genera el bundle optimizado en `/dist`. TypeScript se compila primero (`tsc -b`) y luego Vite empaqueta.
