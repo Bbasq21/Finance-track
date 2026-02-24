@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { render, RenderOptions } from "@testing-library/react";
+import type { ReactElement } from "react";
+import { render, type RenderOptions } from "@testing-library/react";
 import { vi } from "vitest";
 import { ExpenseContext } from "./context/expenseContextDef";
 import type { Expense, ExpenseCategory } from "./types/expense";
@@ -11,23 +11,20 @@ export const MOCK_EXPENSES: Expense[] = [
     category: "Transporte" as ExpenseCategory,
     date: "2026-02-20",
     description: "Gasolina",
-    createdAt: "2026-02-20T10:00:00.000Z",
   },
   {
     id: "2",
-    amount: 200000, // Comida 1
+    amount: 200000,
     category: "Comida" as ExpenseCategory,
     date: "2026-02-21",
     description: "Mercado",
-    createdAt: "2026-02-21T10:00:00.000Z",
   },
   {
     id: "3",
-    amount: 150000, // Comida 2
+    amount: 150000,
     category: "Comida" as ExpenseCategory,
     date: "2026-02-22",
     description: "Cena",
-    createdAt: "2026-02-22T10:00:00.000Z",
   },
   {
     id: "4",
@@ -35,7 +32,6 @@ export const MOCK_EXPENSES: Expense[] = [
     category: "Entretenimiento" as ExpenseCategory,
     date: "2026-02-23",
     description: "Cine",
-    createdAt: "2026-02-23T10:00:00.000Z",
   },
 ];
 
@@ -44,7 +40,7 @@ export const MOCK_EXPENSES: Expense[] = [
 export const mockUseExpensesValues = {
   expenses: MOCK_EXPENSES,
   loading: false,
-  error: null,
+  error: null as string | null,
   fetchExpenses: vi.fn(),
   addExpense: vi.fn(),
   editExpense: vi.fn(),

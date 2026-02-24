@@ -44,7 +44,6 @@ describe("ExpenseForm Component", () => {
 
     // Assuming the date input doesn't have a specific placeholder or label role that's perfectly accessible in the UI
     // due to DOM nesting, we can find it via label or type.
-    const inputs = screen.getAllByRole("textbox");
     // Textarea is by placeholder
     const descInput = screen.getByPlaceholderText(/Almuerzo con el equipo/);
     fireEvent.change(descInput, { target: { value: "Uber a la oficina" } });

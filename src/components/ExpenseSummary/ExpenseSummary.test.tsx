@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { ExpenseSummary } from "./ExpenseSummary";
-import { renderWithContext, MOCK_EXPENSES } from "../../test-utils";
+import { renderWithContext } from "../../test-utils";
 import * as formatters from "../../utils/formatters";
 
 describe("ExpenseSummary Component", () => {
