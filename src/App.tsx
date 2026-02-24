@@ -1,8 +1,7 @@
 // src/App.tsx
-import React from 'react';
-import { ExpenseSummary } from './components/ExpenseSummary/ExpenseSummary';
-import { ExpenseForm } from './components/ExpenseForm/ExpenseForm';
-import { ExpenseList } from './components/ExpenseList/ExpenseList';
+import { ExpenseSummary } from "./components/ExpenseSummary/ExpenseSummary";
+import { ExpenseForm } from "./components/ExpenseForm/ExpenseForm";
+import { ExpenseList } from "./components/ExpenseList/ExpenseList";
 
 function App() {
   return (
@@ -10,9 +9,7 @@ function App() {
       {/* Header/Navbar */}
       <header className="bg-white shadow-sm mb-4 py-3 border-bottom">
         <div className="container d-flex justify-content-between align-items-center">
-          <h1 className="h4 text-primary fw-bold mb-0">
-            📊 Control de Gastos
-          </h1>
+          <h1 className="h4 text-primary fw-bold mb-0">📊 Control de Gastos</h1>
           {/* Aquí podrías agregar un perfil de usuario o botón de logout en el futuro */}
         </div>
       </header>
