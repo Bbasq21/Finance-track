@@ -1,40 +1,116 @@
 // src/App.tsx
+import { useState } from "react";
 import { ExpenseSummary } from "./components/ExpenseSummary/ExpenseSummary";
 import { ExpenseForm } from "./components/ExpenseForm/ExpenseForm";
 import { ExpenseList } from "./components/ExpenseList/ExpenseList";
+import { useExpenses } from "./hooks/useExpenses";
+import type { ExpenseCategory } from "./types/expense";
+
+const CATEGORIES: ExpenseCategory[] = [
+  "Comida",
+  "Transporte",
+  "Entretenimiento",
+  "Salud",
+  "Otros",
+];
 
 function App() {
+  const { expenses } = useExpenses();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter expenses
+  const filteredExpenses = expenses.filter((expense) => {
+    const matchesCategory = selectedCategory
+      ? expense.category === selectedCategory
+      : true;
+    const matchesSearch = searchQuery
+      ? expense.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+    return matchesCategory && matchesSearch;
+  });
+
   return (
-    <div className="bg-light min-vh-100 pb-5">
-      {/* Header/Navbar */}
-      <header className="bg-white shadow-sm mb-4 py-3 border-bottom">
+    <div className="min-vh-100" style={{ background: "var(--bg-main)" }}>
+      {/* Navbar */}
+      <nav className="app-navbar">
         <div className="container d-flex justify-content-between align-items-center">
-          <h1 className="h4 text-primary fw-bold mb-0">📊 Control de Gastos</h1>
-          {/* Aquí podrías agregar un perfil de usuario o botón de logout en el futuro */}
+          <div className="navbar-brand">
+            <span className="brand-icon">ET</span>
+            ExpenseTracker
+          </div>
+          <div className="nav-actions">
+            <span className="nav-link" style={{ cursor: "pointer" }}>
+              Settings
+            </span>
+            <button className="nav-icon" title="Notificaciones">
+              🔔
+            </button>
+            <div className="nav-avatar">B</div>
+          </div>
         </div>
-      </header>
+      </nav>
 
       {/* Main Content */}
-      <main className="container">
-        {/* Sección 1: Resumen de Gastos (Ocupa todo el ancho) */}
-        <section aria-label="Resumen de gastos">
-          <ExpenseSummary />
-        </section>
-
-        {/* Sección 2: Layout de dos columnas para Formulario y Lista */}
-        <div className="row g-4">
-          {/* Columna Izquierda: Formulario (Ocupa 4 de 12 columnas en escritorio) */}
-          <div className="col-12 col-lg-4">
-            <ExpenseForm />
+      <main className="container py-4">
+        {/* Dashboard Header */}
+        <div className="dashboard-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+          <div>
+            <h2>Dashboard</h2>
+            <p>Overview of your financial health</p>
           </div>
-
-          {/* Columna Derecha: Lista de Gastos (Ocupa 8 de 12 columnas en escritorio) */}
-          <div className="col-12 col-lg-8">
-            {/* Aquí irán los filtros en el siguiente paso */}
-            <ExpenseList />
+          <div className="date-range-badge">
+            📅{" "}
+            {new Date().toLocaleDateString("es-CO", {
+              month: "short",
+              year: "numeric",
+            })}
           </div>
         </div>
+
+        {/* Summary Cards */}
+        <ExpenseSummary />
+
+        {/* Filter Bar */}
+        <div className="filter-bar">
+          <select
+            className="form-select"
+            style={{ maxWidth: "180px" }}
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">🔽 All Categories</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="🔍 Search transactions..."
+            style={{ maxWidth: "280px" }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <div className="ms-auto">
+            <button
+              className="btn-add-expense"
+              onClick={() => setShowAddModal(true)}
+            >
+              + Add Expense
+            </button>
+          </div>
+        </div>
+
+        {/* Expense Table */}
+        <ExpenseList filteredExpenses={filteredExpenses} />
       </main>
+
+      {/* Add Expense Modal */}
+      {showAddModal && <ExpenseForm onClose={() => setShowAddModal(false)} />}
     </div>
   );
 }

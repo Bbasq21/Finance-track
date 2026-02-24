@@ -1,7 +1,12 @@
-// src/components/ExpenseForm/ExpenseForm.tsx
+// src/components/ExpenseList/EditExpenseModal.tsx
 import { useState } from "react";
+import type { Expense, ExpenseCategory } from "../../types/expense";
 import { useExpenses } from "../../hooks/useExpenses";
-import type { ExpenseCategory } from "../../types/expense";
+
+interface EditExpenseModalProps {
+  expense: Expense;
+  onClose: () => void;
+}
 
 const CATEGORIES: ExpenseCategory[] = [
   "Comida",
@@ -11,23 +16,23 @@ const CATEGORIES: ExpenseCategory[] = [
   "Otros",
 ];
 
-interface ExpenseFormProps {
-  onClose: () => void;
-}
+export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
+  expense,
+  onClose,
+}) => {
+  const { editExpense } = useExpenses();
 
-export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
-  const { addExpense } = useExpenses();
-
-  const [amount, setAmount] = useState<number | "">("");
-  const [category, setCategory] = useState<ExpenseCategory>("Comida");
-  const [date, setDate] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [amount, setAmount] = useState<number>(expense.amount);
+  const [category, setCategory] = useState<ExpenseCategory>(expense.category);
+  const [date, setDate] = useState<string>(expense.date);
+  const [description, setDescription] = useState<string>(
+    expense.description || "",
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || !date) return;
 
-    await addExpense({
+    await editExpense(expense.id, {
       amount: Number(amount),
       category,
       date,
@@ -45,8 +50,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
           {/* Header */}
           <div className="expense-modal-header">
             <div>
-              <h4>Add New Expense</h4>
-              <p>Keep track of your spending habits</p>
+              <h4>Edit Expense</h4>
+              <p>Update your expense details</p>
             </div>
             <button className="expense-modal-close" onClick={onClose}>
               ✕
@@ -64,13 +69,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                   <input
                     type="number"
                     className="form-control"
-                    placeholder="0.00"
                     value={amount}
-                    onChange={(e) =>
-                      setAmount(
-                        e.target.value === "" ? "" : Number(e.target.value),
-                      )
-                    }
+                    onChange={(e) => setAmount(Number(e.target.value))}
                     required
                     min="1"
                   />
@@ -126,14 +126,6 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
-
-              {/* Attach Receipt (visual only) */}
-              <div className="mb-1">
-                <label className="form-label">Attach Receipt</label>
-                <div className="receipt-drop-area">
-                  📎 Drop file or click to upload
-                </div>
-              </div>
             </div>
 
             {/* Footer */}
@@ -142,7 +134,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({ onClose }) => {
                 Cancel
               </button>
               <button type="submit" className="btn-save-expense">
-                ✓ Save Expense
+                ✓ Save Changes
               </button>
             </div>
           </form>

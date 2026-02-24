@@ -1,102 +1,203 @@
 // src/components/ExpenseList/ExpenseList.tsx
-import React from 'react';
-import { useExpenses } from '../../hooks/useExpenses';
-import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useState } from "react";
+import { useExpenses } from "../../hooks/useExpenses";
+import { formatCurrency, formatDate } from "../../utils/formatters";
+import { EditExpenseModal } from "./EditExpenseModal";
+import type { Expense } from "../../types/expense";
 
-export const ExpenseList: React.FC = () => {
-  // Extraemos los datos y funciones necesarias de nuestro Custom Hook
-  const { expenses, loading, error, removeExpense } = useExpenses();
+const ITEMS_PER_PAGE = 5;
 
-  // Manejo de estado de carga
+const CATEGORY_ICONS: Record<string, { icon: string; iconClass: string }> = {
+  Comida: { icon: "🍽️", iconClass: "icon-food" },
+  Transporte: { icon: "🚗", iconClass: "icon-transport" },
+  Entretenimiento: { icon: "🎬", iconClass: "icon-entertainment" },
+  Salud: { icon: "❤️", iconClass: "icon-health" },
+  Otros: { icon: "📦", iconClass: "icon-otros" },
+};
+
+const BADGE_CLASS: Record<string, string> = {
+  Comida: "badge-comida",
+  Transporte: "badge-transporte",
+  Entretenimiento: "badge-entretenimiento",
+  Salud: "badge-salud",
+  Otros: "badge-otros",
+};
+
+interface ExpenseListProps {
+  filteredExpenses: Expense[];
+}
+
+export const ExpenseList: React.FC<ExpenseListProps> = ({
+  filteredExpenses,
+}) => {
+  const { loading, error, removeExpense } = useExpenses();
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(filteredExpenses.length / ITEMS_PER_PAGE);
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedExpenses = filteredExpenses.slice(
+    startIdx,
+    startIdx + ITEMS_PER_PAGE,
+  );
+
   if (loading) {
     return (
-      <div className="text-center my-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
+      <div className="expense-table-card">
+        <div className="loading-state">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Manejo de errores
   if (error) {
-    return <div className="alert alert-danger shadow-sm">{error}</div>;
-  }
-
-  // Manejo de estado vacío (Empty State)
-  if (expenses.length === 0) {
     return (
-      <div className="alert alert-info shadow-sm text-center">
-        No tienes gastos registrados en este momento. ¡Agrega uno para empezar!
+      <div className="expense-table-card">
+        <div className="empty-state" style={{ color: "#ef4444" }}>
+          {error}
+        </div>
       </div>
     );
   }
 
-  // Función para confirmar y eliminar
   const handleDelete = async (id: string) => {
-    // Un confirm nativo es suficiente y funcional para una prueba técnica Mid
-    if (window.confirm('¿Estás seguro de que deseas eliminar este gasto?')) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este gasto?")) {
       await removeExpense(id);
     }
   };
 
-  // Función placeholder para editar (la implementaremos más a fondo después)
   const handleEdit = (id: string) => {
-    alert(`Funcionalidad de edición para el ID: ${id} se implementará en el siguiente sprint o mediante un modal.`);
+    const expenseToEdit = filteredExpenses.find((exp) => exp.id === id);
+    if (expenseToEdit) {
+      setEditingExpense(expenseToEdit);
+    }
   };
 
   return (
-    <div className="card shadow-sm border-0 mb-4">
-      <div className="card-body p-0">
-        {/* table-responsive es clave para la evaluación de diseño móvil */}
-        <div className="table-responsive">
-          <table className="table table-hover align-middle mb-0">
-            <thead className="table-light">
-              <tr>
-                <th className="px-4 py-3">Fecha</th>
-                <th className="py-3">Categoría</th>
-                <th className="py-3">Descripción</th>
-                <th className="text-end py-3">Monto</th>
-                <th className="text-center px-4 py-3">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expenses.map((expense) => (
-                <tr key={expense.id}>
-                  <td className="px-4 text-nowrap">{formatDate(expense.date)}</td>
-                  <td>
-                    <span className="badge bg-secondary bg-opacity-75">
-                      {expense.category}
-                    </span>
-                  </td>
-                  <td className="text-muted">
-                    {expense.description ? expense.description : <span className="fst-italic">-</span>}
-                  </td>
-                  <td className="text-end fw-bold text-nowrap">
-                    {formatCurrency(expense.amount)}
-                  </td>
-                  <td className="text-center px-4 text-nowrap">
-                    <button 
-                      className="btn btn-sm btn-outline-secondary me-2"
-                      onClick={() => handleEdit(expense.id)}
-                      title="Editar gasto"
-                    >
-                      ✏️
-                    </button>
-                    <button 
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => handleDelete(expense.id)}
-                      title="Eliminar gasto"
-                    >
-                      🗑️
-                    </button>
-                  </td>
+    <>
+      <div className="expense-table-card">
+        {filteredExpenses.length === 0 ? (
+          <div className="empty-state">
+            No se encontraron gastos. ¡Agrega uno para empezar!
+          </div>
+        ) : (
+          <>
+            <table className="expense-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th style={{ textAlign: "right" }}>Amount</th>
+                  <th style={{ textAlign: "center" }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {paginatedExpenses.map((expense) => {
+                  const meta =
+                    CATEGORY_ICONS[expense.category] || CATEGORY_ICONS.Otros;
+                  const badgeCls =
+                    BADGE_CLASS[expense.category] || "badge-otros";
+                  return (
+                    <tr key={expense.id}>
+                      <td>
+                        <div className="expense-date">
+                          {formatDate(expense.date)}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="expense-desc">
+                          <span
+                            className={`expense-desc-icon ${meta.iconClass}`}
+                          >
+                            {meta.icon}
+                          </span>
+                          {expense.description || (
+                            <span
+                              style={{
+                                fontStyle: "italic",
+                                color: "var(--text-muted)",
+                              }}
+                            >
+                              Sin descripción
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`category-badge ${badgeCls}`}>
+                          {expense.category}
+                        </span>
+                      </td>
+                      <td
+                        className="expense-amount"
+                        style={{ textAlign: "right" }}
+                      >
+                        {formatCurrency(expense.amount)}
+                      </td>
+                      <td
+                        className="expense-actions"
+                        style={{ textAlign: "center" }}
+                      >
+                        <button
+                          className="btn me-1"
+                          onClick={() => handleEdit(expense.id)}
+                          title="Editar"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="btn btn-delete"
+                          onClick={() => handleDelete(expense.id)}
+                          title="Eliminar"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            {/* Pagination */}
+            <div className="table-pagination">
+              <span className="pagination-info">
+                Showing {startIdx + 1}-
+                {Math.min(startIdx + ITEMS_PER_PAGE, filteredExpenses.length)}{" "}
+                of {filteredExpenses.length} results
+              </span>
+              <div className="pagination-buttons">
+                <button
+                  className="btn-page"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                >
+                  Previous
+                </button>
+                <button
+                  className="btn-page"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-    </div>
+
+      {/* Edit Modal */}
+      {editingExpense && (
+        <EditExpenseModal
+          expense={editingExpense}
+          onClose={() => setEditingExpense(null)}
+        />
+      )}
+    </>
   );
 };
